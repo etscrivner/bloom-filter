@@ -38,20 +38,25 @@ if __name__ == '__main__':
     parser.add_argument('-m', dest='bit_vector_length', type=int,
                         default=1024000,
                         help='Number of bits for bloom filter bit vector.')
+    parser.add_argument('-d', dest='dict_file', type=str,
+                        default='/usr/share/dict/words',
+                        help='Dictionary file to use')
     args = parser.parse_args()
 
     false_positive_prob = probability_of_false_positive(
         args.num_hash_funcs, 100000, args.bit_vector_length)
-    print 'k', args.num_hash_funcs
-    print 'm', args.bit_vector_length
-    print 'False positive probability', false_positive_prob
+    print 'Hash functions:', args.num_hash_funcs
+    print 'Bits:', args.bit_vector_length
+    print 'Dict file: ', args.dict_file
+    print 'Probabilty of false positive (After 100000 inserts):', \
+        false_positive_prob
 
     bloomfilter = bloom_filter.BloomFilter(
         args.num_hash_funcs, args.bit_vector_length)
 
     sys.stdout.write('Loading dictionary...')
     sys.stdout.flush()
-    with open('/usr/share/dict/words', 'r') as dictfile:
+    with open(args.dict_file, 'r') as dictfile:
         for word in dictfile:
             bloomfilter.insert(word.strip())
     print 'DONE!'
