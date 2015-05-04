@@ -66,4 +66,4 @@ if __name__ == '__main__':
         word = raw_input('Word to check: ')
         if word == ':q':
             break
-        print (word in bloomfilter)
+        print (word.lower() in bloomfilter)
